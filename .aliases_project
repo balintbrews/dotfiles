@@ -1,0 +1,2 @@
+# VTO
+alias sivto="cd ~/Sites/sites-wunderkraut/vto/web/profiles/vto && drush si vto --site-name=VTO --account-pass=admin -y && drush ns-core-devel-enable"
