@@ -7,3 +7,8 @@ alias gco="git checkout"
 alias gcob="git checkout -b"
 alias gl="git l"
 alias glg="git lg"
+
+#Drush
+alias dcc="drush cc all"
+alias dfu="drush fu -y"
+alias dfr="drush fr -y"
