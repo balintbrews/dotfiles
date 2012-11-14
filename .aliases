@@ -1,3 +1,8 @@
+# Frequently used unix commands
+alias l="ls -lah"
+alias grp="grep -rn"
+alias *="sudo"
+
 # Git
 alias gst="git st"
 alias gd="git d"
