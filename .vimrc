@@ -102,3 +102,7 @@ endif
 if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
 endif
+
+" Shortcut for clearing the search register.
+nmap <silent> <leader>/ :nohlsearch<CR>
+
