@@ -1,5 +1,5 @@
 # Git
-alias gst="git status -s"
+alias gst="git st"
 alias gd="git d"
 alias ga="git add"
 alias gci="git commit"
