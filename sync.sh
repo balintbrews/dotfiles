@@ -13,3 +13,4 @@ else
 	fi
 fi
 unset doIt
+source $HOME/.bash_profile
