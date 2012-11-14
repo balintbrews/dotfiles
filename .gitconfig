@@ -4,7 +4,7 @@
 [alias]
 	ci = commit
 	co = checkout
-	st = status -s
+	st = status
 	d = diff
 	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
 	lg = log --stat --max-count=5
