@@ -1,12 +1,12 @@
 " Set vim settings rather then vi settings.
 set nocompatible
 
-" Use dark Solarized color scheme.
-color solarized
 set bg=dark
+color Tomorrow-Night
 
 " GUI-specific settings, e.g. for MacVim.
 if has("gui_running")
+  color solarized
   set cursorline
   set guifont=Monaco:h13
   set guioptions=egmrLt
