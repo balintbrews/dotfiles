@@ -2,6 +2,7 @@
 alias l="ls -lah"
 alias grp="grep -rn"
 alias *="sudo"
+alias restartapache="sudo /usr/sbin/apachectl restart"
 
 # Git
 alias gst="git st"
