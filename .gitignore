@@ -1,2 +1,5 @@
 # Folder view configuration files
 .DS_Store
+
+# Drupal-specific
+web/sites/all/drush
