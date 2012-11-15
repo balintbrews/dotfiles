@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exports.
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:/Users/balint/scripts:$PATH"
 export EDITOR=vi
 export TERM=xterm-256color
 export CLICOLOR=true
