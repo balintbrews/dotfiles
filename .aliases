@@ -22,4 +22,4 @@ alias dfr="drush fr -y"
 ## Other
 
 # Generates a random string and copies it to the clipboard.
-alias frand="cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
+alias srand="cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
