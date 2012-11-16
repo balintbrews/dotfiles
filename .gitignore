@@ -1,5 +1,10 @@
 # Folder view configuration files
 .DS_Store
 
+# IDE
+.idea
+
 # Drupal-specific
+sites/default/settings.php
+sites/default/files
 web/sites/all/drush
