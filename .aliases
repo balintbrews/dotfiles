@@ -1,10 +1,10 @@
-# Frequently used unix commands
+## Frequently used unix commands
 alias l="ls -lah"
 alias grp="grep -rn"
 alias *="sudo"
 alias restartapache="sudo /usr/sbin/apachectl restart"
 
-# Git
+## Git
 alias gst="git st"
 alias gd="git d"
 alias ga="git add"
@@ -14,7 +14,12 @@ alias gcob="git checkout -b"
 alias gl="git l"
 alias glg="git lg"
 
-#Drush
+## Drush
 alias dcc="drush cc all"
 alias dfu="drush fu -y"
 alias dfr="drush fr -y"
+
+## Other
+
+# Generates a random string and copies it to the clipboard.
+alias frand="cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
