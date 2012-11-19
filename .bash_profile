@@ -32,7 +32,7 @@ source $HOME/.aliases_project
 ## Configure the bash prompt.
 
 # Date piece. It's not used at the moment, but let's keep it here anyway. It could be useful.
-DATE_PIECE="\[${color_gray}\]\$(date '+%a %H:%M:%S')\[${color_none}\]"
+DATE_PIECE="\[${color_gray}\]\$(date '+%H:%M:%S')\[${color_none}\]"
 
 # Path piece.
 PATH_PIECE="\$(echo \${PWD/\$HOME/\~} | sed -E 's/.*((\/.*){'\$(((\$(tput cols) - 20) / 10))'})/..\1/')"
@@ -48,7 +48,7 @@ else
 fi
 
 # Bash prompt.
-export PS1="\[${color_gray}\]\u\[${color_none}\]@\[${color_yellow}\]\h \[${color_green}\]${PATH_PIECE}${GIT_PIECE:-""}\n\[${color_light_blue}\]⮀\[${color_none}\] "
+export PS1="${DATE_PIECE} \[${color_yellow}\]\u\[${color_none}\]@\[${color_yellow}\]\h \[${color_green}\]${PATH_PIECE}${GIT_PIECE:-""}\n\[${color_light_blue}\]⮀\[${color_none}\] "
 
 
 # SSH alias to fix TERM problem.
