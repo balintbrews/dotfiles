@@ -1,2 +1,6 @@
+# General
+alias oldsberg-tunnel-stop="ps -eo pid,args | grep \"[s]sh -fN -l.*.-L 8080:127.0.0.1:8080 oldsberg.ci.nod1.se\" | cut -f1 -d' ' | xargs kill"
+alias oldsberg-tunnel-start="oldsberg-tunnel-stop && ssh -fN -l balint -L 8080:127.0.0.1:8080 oldsberg.ci.nod1.se"
+
 # VTO
 alias sivto="cd ~/Sites/sites-wunderkraut/vto/web/profiles/vto && drush si vto --site-name=VTO --account-pass=admin -y && drush ns-core-devel-enable"
