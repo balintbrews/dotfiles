@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Usage: drupaldbcc user password database
+
+USER="$1"
+PASS="$2"
+DB="$3"
+HOST="localhost"
+
+TABLES=`mysql --skip-column-names -e 'show tables' -u ${USER} -p${PASS} -h ${HOST} ${DB}`
+CACHE_TABLES=`echo "$TABLES" | grep "^cache"`
+
+for table in $CACHE_TABLES
+do
+  `mysql -e "truncate table $table" -u ${USER} -p${PASS} -h ${HOST} ${DB}`
+  echo "==> Database: ${DB} -- truncated table $table"
+done
