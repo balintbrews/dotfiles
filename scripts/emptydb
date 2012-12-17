@@ -12,5 +12,5 @@ TABLES=`mysql --skip-column-names -e 'show tables' -u ${USER} -p${PASS} -h ${HOS
 for table in $TABLES
 do
   `mysql -e "drop table $table" -u ${USER} -p${PASS} -h ${HOST} ${DB}`
-  echo "==> Database: ${DB} -- dropped table $table."
+  echo "==> Database: ${DB} -- dropped table $table"
 done
