@@ -1,6 +1,6 @@
 ## Frequently used unix commands
 alias l="ls -lah"
-alias grp="grep -rn"
+alias grp="grep -rn --color"
 alias *="sudo"
 alias restartapache="sudo /usr/sbin/apachectl restart"
 
