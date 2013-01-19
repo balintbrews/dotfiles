@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Usage: drupalrename module_old module_new
+
+MODULE_OLD="$1"
+MODULE_NEW="$2"
+
+for i in ${MODULE_OLD}*; do
+  mv $i ${i/${MODULE_OLD}/${MODULE_NEW}}
+done
