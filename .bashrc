@@ -1,4 +1,4 @@
-#!/bin/bash
+# ~/.bashrc: executed by bash for non-login shells.
 
 # Exports.
 export PATH="/usr/local/bin:/usr/local/sbin:/Users/balint/scripts:$PATH"
