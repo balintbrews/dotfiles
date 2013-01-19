@@ -47,8 +47,15 @@ else
   GIT_PIECE=''
 fi
 
+default_hostname='candy'
+if [ $HOSTNAME == $default_hostname ]; then
+  color_user_and_hostname=${color_yellow}
+else
+  color_user_and_hostname=${color_red}
+fi
+
 # Bash prompt.
-export PS1="${DATE_PIECE} \[${color_yellow}\]\u\[${color_none}\]@\[${color_yellow}\]\H \[${color_green}\]${PATH_PIECE}${GIT_PIECE:-""}\n\[${color_light_blue}\]▶\[${color_none}\] "
+export PS1="${DATE_PIECE} \[$color_user_and_hostname\]\u\[${color_none}\]@\[$color_user_and_hostname\]\H \[${color_green}\]${PATH_PIECE}${GIT_PIECE:-""}\n\[${color_light_blue}\]▶\[${color_none}\] "
 
 
 # SSH alias to fix TERM problem.
