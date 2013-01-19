@@ -48,7 +48,7 @@ else
 fi
 
 # Bash prompt.
-export PS1="${DATE_PIECE} \[${color_yellow}\]\u\[${color_none}\]@\[${color_yellow}\]\h \[${color_green}\]${PATH_PIECE}${GIT_PIECE:-""}\n\[${color_light_blue}\]▶\[${color_none}\] "
+export PS1="${DATE_PIECE} \[${color_yellow}\]\u\[${color_none}\]@\[${color_yellow}\]\H \[${color_green}\]${PATH_PIECE}${GIT_PIECE:-""}\n\[${color_light_blue}\]▶\[${color_none}\] "
 
 
 # SSH alias to fix TERM problem.
