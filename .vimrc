@@ -74,7 +74,8 @@ set noerrorbells
 
 " Highlighting
 if &t_Co > 2 || has("gui_running")
-   syntax on                    " switch syntax highlighting on, when the terminal has colors
+   " Switch syntax highlighting on, when the terminal has colors.
+   syntax on
 endif
 
 " Language and autocompletion
@@ -84,7 +85,7 @@ set ofu=syntaxcomplete#Complete
 " Sudo to write
 cmap w!! w !sudo tee % >/dev/null
 
-" Strip all trailing whitespace from a file, using ,w
+" Strip all trailing whitespace from a file, using ,w.
 nnoremap <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 
 " Drupal-specific filetype settings
@@ -98,11 +99,11 @@ if has("autocmd")
   augroup END
 endif
 
-" Source the vimrc file after saving it
+" Source the vimrc file after saving it.
 if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
 endif
 
-" Shortcut for clearing the search register.
+" Shortcut for clearing the search register
 nmap <silent> <leader>/ :nohlsearch<CR>
 
