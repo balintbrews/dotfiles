@@ -6,7 +6,7 @@ color Tomorrow-Night
 
 " GUI-specific settings, e.g. for MacVim.
 if has("gui_running")
-  color solarized
+  color jellybeans
   set cursorline
   set guifont=Monaco:h13
   set guioptions=egmrLt
