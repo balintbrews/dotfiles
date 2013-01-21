@@ -13,4 +13,3 @@ else
 	fi
 fi
 unset doIt
-source $HOME/.bashrc
