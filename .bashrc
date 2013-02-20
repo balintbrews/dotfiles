@@ -35,7 +35,7 @@ source $HOME/.aliases_project
 DATE_PIECE="\[${color_gray}\]\$(date '+%H:%M:%S')\[${color_none}\]"
 
 # Path piece.
-PATH_PIECE="\$(echo \${PWD/\$HOME/\~} | sed -E 's/.*((\/.*){'\$(((\$(tput cols) - 50) / 10))'})/..\1/')"
+PATH_PIECE="\$(echo \${PWD/\$HOME/\~} | sed -E 's/.*((\/.*){'\$(((\$(tput cols) - 80) / 10))'})/..\1/')"
 
 # Git piece.
 if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
