@@ -1,7 +1,7 @@
 # ~/.bashrc: executed by bash for non-login shells.
 
 # Exports.
-export PATH="/usr/local/bin:/usr/local/sbin:/Users/balint/scripts:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share:/Users/balint/scripts:$PATH"
 export EDITOR=vi
 export TERM=xterm-256color
 export CLICOLOR=true
@@ -55,7 +55,7 @@ else
 fi
 
 # Bash prompt.
-export PS1="${DATE_PIECE} \[$color_user_and_hostname\]\u\[${color_none}\]@\[$color_user_and_hostname\]\H \[${color_green}\]${PATH_PIECE}${GIT_PIECE:-""}\n\[${color_light_blue}\]▶\[${color_none}\] "
+export PS1="${DATE_PIECE} \[$color_user_and_hostname\]\u\[${color_none}\]@\[$color_user_and_hostname\]\H \[${color_green}\]${PATH_PIECE}\n\[${color_light_blue}\]▶${GIT_PIECE:-""}\[${color_none}\] "
 
 
 # SSH alias to fix TERM problem.
