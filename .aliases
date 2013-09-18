@@ -19,6 +19,11 @@ alias dcc="drush cc all"
 alias dfu="drush fu -y"
 alias dfr="drush fr -y"
 
+## MySQL
+alias mysql='mysql -uroot -proot'
+alias mysqlstart='sudo /usr/local/mysql/support-files/mysql.server start'
+alias mysqlstop='sudo /usr/local/mysql/support-files/mysql.server stop'
+
 ## Other
 
 # Runs PHP_CodeSniffer using the Drupal coding standards.
