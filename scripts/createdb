@@ -1,0 +1,15 @@
+#!/bin/bash
+set -x
+
+# Usage: createdb user pass newdatabase newuser newpassword
+
+USER="$1"
+PASS="$2"
+NEWDB="$3"
+NEWUSER="$4"
+NEWPASS="$5"
+
+mysql -u${USER} -p${PASS} -e "CREATE DATABASE ${NEWDB} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+mysql -u${USER} -p${PASS} -e "GRANT ALL PRIVILEGES ON ${NEWDB}.* TO '${NEWUSER}'@'localhost' IDENTIFIED BY '${NEWPASS}';"
+mysql -u${USER} -p${PASS} -e "FLUSH PRIVILEGES;"
+
