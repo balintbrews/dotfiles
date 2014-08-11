@@ -42,9 +42,9 @@ DATE_PIECE="\[${color_gray}\]\$(date '+%H:%M:%S')\[${color_none}\]"
 PATH_PIECE="\$(echo \${PWD/\$HOME/\~} | sed -E 's/.*((\/.*){'\$(((\$(tput cols) - 85) / 10))'})/..\1/')"
 
 # Git piece.
-if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
-  . /usr/local/etc/bash_completion.d/git-completion.bash 
-  
+if [ -f /usr/local/etc/bash_completion.d/git-prompt.sh ]; then
+  . /usr/local/etc/bash_completion.d/git-prompt.sh
+
   GIT_PS1_SHOWDIRTYSTATE=true
   GIT_PIECE='$(__git_ps1 " \[$color_light_purple\](%s)\[$color_none\]")'
 else
