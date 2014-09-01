@@ -29,7 +29,7 @@ alias mysqlstop='sudo /usr/local/mysql/support-files/mysql.server stop'
 # Runs PHP_CodeSniffer using the Drupal coding standards.
 alias dcs="phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme"
 # Generates a random string and copies it to the clipboard.
-alias srand="cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
+alias srand="cat /dev/urandom | env LC_ALL=C LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
 
 # OS X
 alias prev="open -a /Applications/Preview.app"
