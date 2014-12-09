@@ -33,6 +33,11 @@ export color_light_gray='\e[0;37m'
 source $HOME/.aliases
 source $HOME/.aliases_project
 
+## Include Git's completion.
+if [ -f /usr/local/git/contrib/completion/git-completion.bash ]; then
+  . /usr/local/git/contrib/completion/git-completion.bash
+fi
+
 ## Configure the bash prompt.
 
 # Date piece. It's not used at the moment, but let's keep it here anyway. It could be useful.
@@ -42,9 +47,8 @@ DATE_PIECE="\[${color_gray}\]\$(date '+%H:%M:%S')\[${color_none}\]"
 PATH_PIECE="\$(echo \${PWD/\$HOME/\~})"
 
 # Git piece.
-if [ -f /usr/local/etc/bash_completion.d/git-prompt.sh ]; then
-  . /usr/local/etc/bash_completion.d/git-prompt.sh
-
+if [ -f /usr/local/git/contrib/completion/git-prompt.sh ]; then
+  . /usr/local/git/contrib/completion/git-prompt.sh
   GIT_PS1_SHOWDIRTYSTATE=true
   GIT_PIECE='$(__git_ps1 " \[$color_light_purple\](%s)\[$color_none\]")'
 else
