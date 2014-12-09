@@ -63,7 +63,7 @@ else
 fi
 
 # Bash prompt.
-export PS1="${DATE_PIECE} \[$color_user_and_hostname\]\u\[${color_none}\]@\[$color_user_and_hostname\]\H \[${color_green}\]${PATH_PIECE}\n\[${color_light_blue}\]▶${GIT_PIECE:-""}\[${color_none}\] "
+export PS1="${DATE_PIECE} \[$color_user_and_hostname\]\u\[${color_none}\]@\[$color_user_and_hostname\]\H \[${color_green}\]${PATH_PIECE}\n\[${color_light_blue}\]❯${GIT_PIECE:-""}\[${color_none}\] "
 
 
 # SSH alias to fix TERM problem.
