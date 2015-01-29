@@ -1,28 +1,59 @@
-" Set vim settings rather then vi settings.
 set nocompatible
+filetype off " Needed for Vundle. Will be turned on later.
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
+
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'chriskempson/vim-tomorrow-theme'
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'bling/vim-airline'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'inside/vim-search-pulse'
+Plugin 'mxw/vim-jsx'
+Plugin 'tpope/vim-fugitive'
+
+call vundle#end()
+filetype plugin indent on
 
 set bg=dark
 color Tomorrow-Night
 
-" GUI-specific settings, e.g. for MacVim.
+" GUI-specific settings.
 if has("gui_running")
-  color jellybeans
+  color solarized
+  set bg=light
   set cursorline
-  set guifont=Monaco:h13
+  set guifont=Monaco:h14
   set guioptions=egmrLt
   set guioptions-=L
 endif
 
-" Change the mapleader from \ to ,
-let mapleader=","
+" Airline config
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+let g:airline_section_x=''
+let g:airline_section_y=''
+let g:airline_section_z='%P'
+let g:airline#extensions#hunks#non_zero_only = 1
 
-" Always show what more we are currently editing in.
-set showmode
-" A tab is two spaces.
+let mapleader=","
+set noshowmode
 set tabstop=2
-" When hitting <BS>, pretend like a tab is removed, even if spaces
 set softtabstop=4
-" Expands tab by default.
+" Insert space characters when tab is pressed.
 set expandtab
 " Number of spaces to use for autoindenting.
 set shiftwidth=2
@@ -30,13 +61,12 @@ set shiftwidth=2
 set shiftround
 " Allow backspacing over everything in insert mode.
 set backspace=indent,eol,start
-" Always set autoindenting on.
 set autoindent
 " Copy the previous indentation on autoindending.
 set copyindent
-" Always show line numbers.
+" Show line numbers.
 set number
-" Always display the current cursor position in the lower right corner.
+" Display the current cursor position in the lower right corner.
 set ruler
 " Show matching paranthesis.
 set showmatch
@@ -56,7 +86,7 @@ set gdefault
 set mouse=a
 " When wrapping paragraphs, don't end lines with 1-letter words.
 set formatoptions+=1
-" Always show a status line.
+" Show a status line.
 set laststatus=2
 " Use a status bar that is 2 rows high.
 set cmdheight=2
@@ -79,7 +109,6 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 " Language and autocompletion
-filetype plugin on
 set ofu=syntaxcomplete#Complete
 
 " Sudo to write
@@ -104,6 +133,8 @@ if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
 endif
 
+
 " Shortcut for clearing the search register
 nmap <silent> <leader>/ :nohlsearch<CR>
+let g:vim_search_pulse_mode = 'pattern'
 
