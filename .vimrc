@@ -13,6 +13,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'inside/vim-search-pulse'
 Plugin 'mxw/vim-jsx'
 Plugin 'tpope/vim-fugitive'
+Plugin 'fatih/vim-go'
 
 call vundle#end()
 filetype plugin indent on
