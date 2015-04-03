@@ -69,6 +69,9 @@ set copyindent
 set number
 " Display the current cursor position in the lower right corner.
 set ruler
+" Display a vertical line after the 80st column
+set textwidth=80
+set colorcolumn=+1
 " Show matching paranthesis.
 set showmatch
 " Ignore case when searching.
