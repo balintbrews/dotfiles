@@ -14,7 +14,7 @@
 	whitespace = fix
 [core]
 	excludesfile = ~/.gitignore
-  whitespace = fix,space-before-tab,tab-in-indent,trailing-space
+  whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
   fileMode = false
 [color "branch"]
 	current = yellow reverse
