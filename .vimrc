@@ -14,6 +14,7 @@ Plugin 'inside/vim-search-pulse'
 Plugin 'mxw/vim-jsx'
 Plugin 'tpope/vim-fugitive'
 Plugin 'fatih/vim-go'
+Plugin 'pangloss/vim-javascript'
 
 call vundle#end()
 filetype plugin indent on
