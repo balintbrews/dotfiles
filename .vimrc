@@ -143,3 +143,6 @@ endif
 nmap <silent> <leader>/ :nohlsearch<CR>
 let g:vim_search_pulse_mode = 'pattern'
 
+" CtrlP config
+" Exclude files that are excluded by .gitignore.
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
