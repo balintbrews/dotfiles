@@ -1,30 +1,35 @@
 set nocompatible
+
+" PLUGINS
+
 filetype off " Needed for Vundle. Will be turned on later.
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'chriskempson/vim-tomorrow-theme'
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'bling/vim-airline'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'inside/vim-search-pulse'
-Plugin 'mxw/vim-jsx'
-Plugin 'tpope/vim-fugitive'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'bling/vim-airline'
+Plugin 'chriskempson/vim-tomorrow-theme'
 Plugin 'fatih/vim-go'
+Plugin 'inside/vim-search-pulse'
+Plugin 'jaxbot/syntastic-react'
+Plugin 'kien/ctrlp.vim'
+Plugin 'mxw/vim-jsx'
+Plugin 'nanotech/jellybeans.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/syntastic'
-Plugin 'jaxbot/syntastic-react'
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 filetype plugin indent on
 
+
+" APPEARANCE
+
 set bg=dark
 color Tomorrow-Night
-
-" GUI-specific settings.
+" Appaerance with GUI.
 if has("gui_running")
   color solarized
   set cursorline
@@ -33,10 +38,8 @@ if has("gui_running")
   set guioptions-=L
 endif
 
-" Source the vimrc file after saving it.
-if has("autocmd")
-  autocmd bufwritepost .vimrc source $MYVIMRC
-endif
+
+" GENERAL CONFIGURATION
 
 let mapleader=","
 set noshowmode
@@ -103,32 +106,55 @@ endif
 " Language and autocompletion
 set ofu=syntaxcomplete#Complete
 
+" Source .vimrc after saving it.
+if has("autocmd")
+  autocmd bufwritepost .vimrc source $MYVIMRC
+endif
+
+
+" SHORTCUTS
+
+" Shortcut for clearing the search register
+nmap <silent> <leader>/ :nohlsearch<CR>
+
 " Sudo to write
 cmap w!! w !sudo tee % >/dev/null
 
 " Strip all trailing whitespace from a file, using ,w.
 nnoremap <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 
-" Shortcut for clearing the search register
-nmap <silent> <leader>/ :nohlsearch<CR>
+
+" FILETYPE ASSOCIATIONS
+
+" Drupal-specific files
+if has("autocmd")
+  augroup module
+    autocmd BufRead,BufNewFile *.module set filetype=php
+    autocmd BufRead,BufNewFile *.inc set filetype=php
+    autocmd BufRead,BufNewFile *.install set filetype=php
+    autocmd BufRead,BufNewFile *.test set filetype=php
+    autocmd BufRead,BufNewFile *.profile set filetype=php
+  augroup END
+endif
+
+
+" PLUGIN CONFIGURATION
+
+" Search pulse
 let g:vim_search_pulse_mode = 'pattern'
 
-" CtrlP config
+" CtrlP
 " Exclude files that are excluded by .gitignore.
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
-" Syntastic config
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
+" Syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
+let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
 
-" Airline config
+" Airline
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
@@ -147,15 +173,4 @@ let g:airline_section_y=''
 let g:airline_section_z='%P'
 let g:airline#extensions#hunks#non_zero_only = 1
 let g:airline#extensions#syntastic#enabled = 1
-
-" Drupal-specific filetype settings
-if has("autocmd")
-  augroup module
-    autocmd BufRead,BufNewFile *.module set filetype=php
-    autocmd BufRead,BufNewFile *.inc set filetype=php
-    autocmd BufRead,BufNewFile *.install set filetype=php
-    autocmd BufRead,BufNewFile *.test set filetype=php
-    autocmd BufRead,BufNewFile *.profile set filetype=php
-  augroup END
-endif
 
