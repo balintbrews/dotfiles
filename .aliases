@@ -19,6 +19,9 @@ alias dcc="drush cc all"
 alias dfu="drush fu -y"
 alias dfr="drush fr -y"
 
+## Gulp
+alias gulpd="gulp watch --dev --livereload --notify"
+
 ## MySQL
 alias mysql='mysql -uroot -proot'
 alias mysqlstart='sudo /usr/local/mysql/support-files/mysql.server start'
