@@ -20,6 +20,7 @@ Plugin 'nanotech/jellybeans.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
+Plugin 'digitaltoad/vim-jade'
 
 call vundle#end()
 filetype plugin indent on
