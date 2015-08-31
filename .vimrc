@@ -127,17 +127,18 @@ nnoremap <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 
 " FILETYPE ASSOCIATIONS
 
-" Drupal-specific files
 if has("autocmd")
   augroup module
+    " Drupal-specific files
     autocmd BufRead,BufNewFile *.module set filetype=php
     autocmd BufRead,BufNewFile *.inc set filetype=php
     autocmd BufRead,BufNewFile *.install set filetype=php
     autocmd BufRead,BufNewFile *.test set filetype=php
     autocmd BufRead,BufNewFile *.profile set filetype=php
+    " JSON files
+    autocmd BufRead,BufNewFile *.json set filetype=json
   augroup END
 endif
-
 
 " PLUGIN CONFIGURATION
 
@@ -153,7 +154,11 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '!'
 let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_scss_checkers = ['']
+let g:syntastic_json_checkers=['jsonlint']
 
 " Airline config
 if !exists('g:airline_symbols')
