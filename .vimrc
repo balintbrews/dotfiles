@@ -11,6 +11,8 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
 Plugin 'chriskempson/vim-tomorrow-theme'
+Plugin 'digitaltoad/vim-jade'
+Plugin 'elzr/vim-json'
 Plugin 'fatih/vim-go'
 Plugin 'inside/vim-search-pulse'
 Plugin 'jaxbot/syntastic-react'
@@ -20,7 +22,6 @@ Plugin 'nanotech/jellybeans.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
-Plugin 'digitaltoad/vim-jade'
 
 call vundle#end()
 filetype plugin indent on
