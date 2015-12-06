@@ -161,6 +161,8 @@ let g:syntastic_warning_symbol = '!'
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_scss_checkers = ['']
 let g:syntastic_json_checkers=['jsonlint']
+let g:syntastic_php_checkers = ['php', 'phpcs']
+let g:syntastic_php_phpcs_args="--standard=Drupal --extensions=php,module,inc,install,test,profile,theme"
 
 " Airline config
 if !exists('g:airline_symbols')
