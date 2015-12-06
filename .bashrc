@@ -9,6 +9,7 @@ export PATH="/usr/local/git/bin/git:/usr/local/bin:/usr/local/sbin:/usr/local/sh
 export EDITOR=vi
 export TERM=xterm-256color
 export CLICOLOR=true
+export XDEBUG_CONFIG="idekey=PHPSTORM"
 
 # Bash colors.
 export color_none='\e[0m'
