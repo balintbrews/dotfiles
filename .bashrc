@@ -68,6 +68,8 @@ fi
 # Bash prompt.
 export PS1="${DATE_PIECE} \[$color_user_and_hostname\]\u\[${color_none}\]@\[$color_user_and_hostname\]\H \[${color_green}\]${PATH_PIECE}\n\[${color_light_blue}\]❯${GIT_PIECE:-""}\[${color_none}\] "
 
+# Enable auto-completion for Drupal Console.
+source "$HOME/.console/console.rc" 2>/dev/null
 
 # SSH alias to fix TERM problem.
 function ssh {
