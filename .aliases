@@ -30,7 +30,8 @@ alias mysqlstop='sudo /usr/local/mysql/support-files/mysql.server stop'
 ## Other
 
 # Runs PHP_CodeSniffer using the Drupal coding standards.
-alias dcs="phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme"
+alias dcs="phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,js,css,info,txt,md"
+alias dbp="phpcs --standard=DrupalPractice --extensions=php,module,inc,install,test,profile,theme,js,css,info,txt,md"
 # Generates a random string and copies it to the clipboard.
 alias srand="cat /dev/urandom | env LC_ALL=C LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
 # Starts a simple HTTP server.
