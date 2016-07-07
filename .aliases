@@ -15,9 +15,11 @@ alias gl="git l"
 alias glg="git lg"
 
 ## Drush
+alias d="drush"
 alias dcc="drush cc all"
 alias dfu="drush fu -y"
 alias dfr="drush fr -y"
+alias dcr="drush cache-rebuild"
 
 ## Gulp
 alias gulpd="gulp watch --dev --livereload --notify"
