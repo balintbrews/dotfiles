@@ -24,3 +24,5 @@
 	remote = green
 [merge]
 	log = true
+[merge "ours"]
+	driver = true

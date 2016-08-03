@@ -34,6 +34,7 @@ set bg=dark
 color Tomorrow-Night
 " Appaerance with GUI.
 if has("gui_running")
+  set bg=light
   color solarized
   set cursorline
   set guifont=Monaco:h14
