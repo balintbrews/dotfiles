@@ -12,6 +12,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
 Plugin 'chriskempson/vim-tomorrow-theme'
 Plugin 'digitaltoad/vim-jade'
+Plugin 'dracula/vim'
 Plugin 'elzr/vim-json'
 Plugin 'fatih/vim-go'
 Plugin 'inside/vim-search-pulse'
@@ -19,7 +20,6 @@ Plugin 'jaxbot/syntastic-react'
 Plugin 'kien/ctrlp.vim'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mxw/vim-jsx'
-Plugin 'nanotech/jellybeans.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
@@ -31,11 +31,9 @@ filetype plugin indent on
 " APPEARANCE
 
 set bg=dark
-color Tomorrow-Night
+color dracula
 " Appaerance with GUI.
 if has("gui_running")
-  set bg=light
-  color solarized
   set cursorline
   set guifont=Monaco:h14
   set guioptions=egmrLt
