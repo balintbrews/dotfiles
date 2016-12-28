@@ -1,7 +1,12 @@
 # Prompt
-if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+if [ -f "$HOME/.dotfiles_lib/bash-git-prompt/gitprompt.sh" ]; then
   GIT_PROMPT_THEME=Custom
-  source "$HOME/.bash-git-prompt/gitprompt.sh"
+  source "$HOME/.dotfiles_lib/bash-git-prompt/gitprompt.sh"
+fi
+
+# Git completion
+if [ -f "$HOME/.dotfiles_lib/git-completion.bash" ]; then
+  source "$HOME/.dotfiles_lib/git-completion.bash"
 fi
 
 # Exports.
