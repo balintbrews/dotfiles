@@ -23,6 +23,7 @@ Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
+Plugin 'vim-scripts/confluencewiki.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -81,8 +82,6 @@ set incsearch
 set gdefault
 " Enable using the mouse if terminal emulator supports it.
 set mouse=a
-" When wrapping paragraphs, don't end lines with 1-letter words.
-set formatoptions+=1
 " Show a status line.
 set laststatus=2
 " Use a status bar that is 2 rows high.
@@ -182,4 +181,21 @@ let g:airline_section_y=''
 let g:airline_section_z='%P'
 let g:airline#extensions#hunks#non_zero_only = 1
 let g:airline#extensions#syntastic#enabled = 1
+
+" Command to write Jira tickets distraction-free.
+command! Jira call JiraTicketWriting()
+function! JiraTicketWriting()
+    set ft=confluencewiki
+    color Solarized
+    set bg=light
+    set guifont=Cousine:h18
+    set lines=30 columns=80
+    set linespace=8
+    set linebreak
+    set nonumber
+    set nocursorline
+    set noruler
+    set guioptions-=r
+    set laststatus=0
+endfunction
 
