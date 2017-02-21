@@ -17,6 +17,7 @@ Plugin 'elzr/vim-json'
 Plugin 'fatih/vim-go'
 Plugin 'inside/vim-search-pulse'
 Plugin 'jaxbot/syntastic-react'
+Plugin 'junegunn/goyo.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mxw/vim-jsx'
@@ -185,17 +186,14 @@ let g:airline#extensions#syntastic#enabled = 1
 " Command to write Jira tickets distraction-free.
 command! Jira call JiraTicketWriting()
 function! JiraTicketWriting()
+    Goyo
     set ft=confluencewiki
     color Solarized
     set bg=light
     set guifont=Cousine:h18
-    set lines=30 columns=80
+    set lines=30 columns=100
     set linespace=8
-    set linebreak
-    set nonumber
     set nocursorline
-    set noruler
     set guioptions-=r
-    set laststatus=0
 endfunction
 
