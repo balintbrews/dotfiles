@@ -12,13 +12,13 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
 Plugin 'chriskempson/vim-tomorrow-theme'
 Plugin 'digitaltoad/vim-jade'
-Plugin 'dracula/vim'
 Plugin 'elzr/vim-json'
 Plugin 'fatih/vim-go'
 Plugin 'inside/vim-search-pulse'
 Plugin 'jaxbot/syntastic-react'
 Plugin 'junegunn/goyo.vim'
 Plugin 'kien/ctrlp.vim'
+Plugin 'morhetz/gruvbox'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
@@ -34,7 +34,7 @@ filetype plugin indent on
 " APPEARANCE
 
 set bg=dark
-color dracula
+color gruvbox
 " Appaerance with GUI.
 if has("gui_running")
   set cursorline
