@@ -22,6 +22,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
+Plugin 'reedes/vim-pencil'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-scripts/confluencewiki.vim'
@@ -187,6 +188,7 @@ let g:airline#extensions#syntastic#enabled = 1
 command! Jira call JiraTicketWriting()
 function! JiraTicketWriting()
     Goyo
+    PencilSoft
     set ft=confluencewiki
     color Solarized
     set bg=light
