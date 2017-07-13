@@ -20,6 +20,8 @@ export EDITOR=vi
 export TERM=xterm-256color
 export CLICOLOR=true
 export XDEBUG_CONFIG="idekey=PHPSTORM"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
 # Include aliases.
 source $HOME/.aliases
