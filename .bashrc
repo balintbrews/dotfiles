@@ -27,6 +27,10 @@ export NVM_DIR="$HOME/.nvm"
 source $HOME/.aliases
 source $HOME/.aliases_project
 
+# Use tmux.
+if command -v tmux>/dev/null; then
+  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
+fi
 
 # SSH alias to fix TERM problem.
 function ssh {
