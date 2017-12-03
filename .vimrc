@@ -38,7 +38,7 @@ colorscheme one
 " Appaerance with GUI.
 if has("gui_running")
   set cursorline
-  set guifont=Fira\ Mono:h16
+  set guifont=Monaco:h14
   set guioptions=egmrLt
   set guioptions-=L
 endif
