@@ -10,7 +10,6 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
-Plugin 'chriskempson/vim-tomorrow-theme'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'elzr/vim-json'
 Plugin 'fatih/vim-go'
@@ -18,10 +17,10 @@ Plugin 'inside/vim-search-pulse'
 Plugin 'jaxbot/syntastic-react'
 Plugin 'junegunn/goyo.vim'
 Plugin 'kien/ctrlp.vim'
-Plugin 'morhetz/gruvbox'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
+Plugin 'rakr/vim-one'
 Plugin 'reedes/vim-pencil'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
@@ -33,12 +32,13 @@ filetype plugin indent on
 
 " APPEARANCE
 
-set bg=dark
-color gruvbox
+set background=dark
+colorscheme one
+
 " Appaerance with GUI.
 if has("gui_running")
   set cursorline
-  set guifont=Monaco:h14
+  set guifont=Fira\ Mono:h16
   set guioptions=egmrLt
   set guioptions-=L
 endif

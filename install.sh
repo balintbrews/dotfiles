@@ -26,8 +26,8 @@ echo -e "${BLUE}==> Downloading Vim plugins.${NC}"
 vim +PluginInstall +qall
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  echo -e "${BLUE}==> Downloading Gruvbox theme for Terminal.app.${NC}"
-  curl -o "$HOME/.dotfiles_lib/Gruvbox.terminal" https://raw.githubusercontent.com/morhetz/gruvbox-contrib/master/osx-terminal/Gruvbox-dark.terminal
+  echo -e "${BLUE}==> Downloading One Dark theme for Terminal.app.${NC}"
+  curl -o "$HOME/.dotfiles_lib/One-Dark.terminal" https://raw.githubusercontent.com/nathanbuchar/atom-one-dark-terminal/master/scheme/terminal/One%20Dark.terminal
 fi
 
 echo -e "${GREEN}===> Dependencies are installed. Enjoy! ${NC}"
