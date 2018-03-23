@@ -27,7 +27,7 @@ vim +PluginInstall +qall
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   echo -e "${BLUE}==> Downloading One Dark theme for Terminal.app.${NC}"
-  curl -o "$HOME/.dotfiles_lib/One-Dark.terminal" https://raw.githubusercontent.com/nathanbuchar/atom-one-dark-terminal/master/scheme/terminal/One%20Dark.terminal
+  curl -o "$HOME/.dotfiles_lib/materialshell-dark.terminal" https://raw.githubusercontent.com/carloscuesta/materialshell/master/shell-color-themes/macOS/terminal/materialshell-dark.terminal
 fi
 
 echo -e "${GREEN}===> Dependencies are installed. Enjoy! ${NC}"
