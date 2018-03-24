@@ -26,11 +26,6 @@ export NVM_DIR="$HOME/.nvm"
 # Include aliases.
 source $HOME/.aliases
 
-# Use tmux.
-if command -v tmux>/dev/null; then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-fi
-
 # SSH alias to fix TERM problem.
 function ssh {
   local old=$TERM
