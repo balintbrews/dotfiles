@@ -25,7 +25,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # Include aliases.
 source $HOME/.aliases
-source $HOME/.aliases_project
 
 # Use tmux.
 if command -v tmux>/dev/null; then
