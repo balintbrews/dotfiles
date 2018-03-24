@@ -41,3 +41,7 @@ function locate {
   mdfind -onlyin $root "kMDItemDisplayName == '$@'wc"
 }
 
+# Platform.sh configuration
+export PATH='/Users/balint/.platformsh/bin':"$PATH"
+source $HOME/.platformsh/shell-config.rc
+
