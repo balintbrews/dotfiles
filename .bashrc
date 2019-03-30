@@ -26,6 +26,22 @@ export NVM_DIR="$HOME/.nvm"
 # Include aliases.
 source $HOME/.aliases
 
+# Set tab and windows title in iTerm.
+if [ $ITERM_SESSION_ID ]; then
+  tabTitle() {
+    directory=${PWD##*/}
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      echo -ne "\033]0;$directory\007";
+    else
+      repository=$(basename "$(git rev-parse --show-toplevel)")
+      echo -ne "\\033];$repository ❯ $directory\\007"
+    fi
+  }
+  
+  tabTitle
+  cd() { builtin cd "$@"; tabTitle; }
+fi
+
 # SSH alias to fix TERM problem.
 function ssh {
   local old=$TERM
