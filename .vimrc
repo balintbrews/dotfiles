@@ -8,19 +8,18 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'airblade/vim-gitgutter'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'bling/vim-airline'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'elzr/vim-json'
 Plugin 'fatih/vim-go'
 Plugin 'inside/vim-search-pulse'
+Plugin 'itchyny/lightline.vim'
 Plugin 'jaxbot/syntastic-react'
 Plugin 'junegunn/goyo.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
-Plugin 'rakr/vim-one'
+Plugin 'phanviet/vim-monokai-pro'
 Plugin 'reedes/vim-pencil'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
@@ -33,16 +32,15 @@ filetype plugin indent on
 " APPEARANCE
 
 set background=dark
-colorscheme one
-
-" Appaerance with GUI.
+set termguicolors
+colorscheme monokai_pro
+let g:lightline = { 'colorscheme': 'monokai_pro' }
 if has("gui_running")
   set cursorline
-  set guifont=Monaco:h14
-  set guioptions=egmrLt
+  set guifont=JetBrains\ Mono\ Regular\ 13
+  set guioptions=egrLt
   set guioptions-=L
 endif
-
 
 " GENERAL CONFIGURATION
 
@@ -99,6 +97,13 @@ set title
 " Don't beep.
 set visualbell
 set noerrorbells
+
+" Copy/Cut/paste from/to global clipboard with Ctrl+C/X/V.
+" https://superuser.com/a/189198
+vmap <C-c> "+yi
+vmap <C-x> "+c
+vmap <C-v> c<ESC>"+p
+imap <C-v> <C-r><C-o>+
 
 " Highlighting
 if &t_Co > 2 || has("gui_running")
@@ -164,38 +169,15 @@ let g:syntastic_json_checkers=['jsonlint']
 let g:syntastic_php_checkers = ['php', 'phpcs']
 let g:syntastic_php_phpcs_args="--standard=Drupal --extensions=php,module,inc,install,test,profile,theme"
 
-" Airline config
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
-let g:airline_section_x=''
-let g:airline_section_y=''
-let g:airline_section_z='%P'
-let g:airline#extensions#hunks#non_zero_only = 1
-let g:airline#extensions#syntastic#enabled = 1
-
-" Command to write Jira tickets distraction-free.
-command! Jira call JiraTicketWriting()
-function! JiraTicketWriting()
+" Command to switch to distraction-free writing mode.
+command! Write call Writing()
+function! Writing()
     Goyo
     PencilSoft
-    set ft=confluencewiki
-    color Solarized
-    set bg=light
-    set guifont=Cousine:h18
+    set ft=markdown
+    set guifont=JetBrains\ Mono\ Regular\ 16
     set lines=30 columns=100
     set linespace=8
     set nocursorline
     set guioptions-=r
 endfunction
-
