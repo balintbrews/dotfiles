@@ -37,7 +37,8 @@ colorscheme monokai_pro
 let g:lightline = { 'colorscheme': 'monokai_pro' }
 if has("gui_running")
   set cursorline
-  set guifont=JetBrains\ Mono\ Regular\ 13
+  set guifont=JetBrains\ Mono\ Regular\ 12
+  set linespace=4
   set guioptions=egrLt
   set guioptions-=L
 endif
