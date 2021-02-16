@@ -30,6 +30,7 @@ export LC_ALL=en_US.UTF-8
 export EDITOR=vi
 export TERM=xterm-256color
 export CLICOLOR=true
+export BASH_SILENCE_DEPRECATION_WARNING=1
 export XDEBUG_CONFIG="idekey=PHPSTORM"
 # Generic locations where executables may reside.
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share:$PATH"
