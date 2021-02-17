@@ -38,6 +38,7 @@ export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share:$PATH"
 export PATH="/opt:$PATH"
 # Globally installed Composer packages.
 export PATH="$HOME/vendor/bin:$PATH"
+export PATH="$HOME/terminus/vendor/bin:$PATH"
 # Making nvm work.
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
