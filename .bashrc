@@ -22,6 +22,15 @@ if [ -f "$HOME/.dotfiles_lib/git-completion.bash" ]; then
   source "$HOME/.dotfiles_lib/git-completion.bash"
 fi
 
+## Keep `ssh-agent` instance running with `keychain` where this utility is
+## installed.
+## See: https://unix.stackexchange.com/a/90869
+if command -v keychain &> /dev/null
+then
+  eval `keychain --agents ssh --eval id_rsa`
+fi
+
+
 # Exports.
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
