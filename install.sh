@@ -25,9 +25,4 @@ git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.
 echo -e "${BLUE}==> Downloading Vim plugins.${NC}"
 vim +PluginInstall +qall
 
-# Install color scheme for GNOME Terminal with Gogh:
-# https://mayccoll.github.io/Gogh/
-echo -e "${BLUE}==> Launching Gogh to install color scheme for GNOME Terminal.${NC}"
-bash -c  "$(wget -qO- https://git.io/vQgMr)"
-
 echo -e "${GREEN}===> Dependencies are installed. Enjoy! ${NC}"

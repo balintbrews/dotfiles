@@ -8,18 +8,15 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'airblade/vim-gitgutter'
-Plugin 'digitaltoad/vim-jade'
+Plugin 'catppuccin/vim', {'name': 'catppuccin'}
 Plugin 'elzr/vim-json'
-Plugin 'fatih/vim-go'
 Plugin 'inside/vim-search-pulse'
 Plugin 'itchyny/lightline.vim'
 Plugin 'jaxbot/syntastic-react'
 Plugin 'junegunn/goyo.vim'
 Plugin 'kien/ctrlp.vim'
-Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
-Plugin 'phanviet/vim-monokai-pro'
 Plugin 'reedes/vim-pencil'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-fugitive'
@@ -33,11 +30,11 @@ filetype plugin indent on
 
 set background=dark
 set termguicolors
-colorscheme monokai_pro
-let g:lightline = { 'colorscheme': 'monokai_pro' }
+colorscheme catppuccin_mocha
+let g:lightline = { 'colorscheme': 'catppuccin_mocha' }
 if has("gui_running")
   set cursorline
-  set guifont=JetBrains\ Mono\ Regular\ 12
+  set guifont=Cartograph\ CF\ 12
   set linespace=4
   set guioptions=egrLt
   set guioptions-=L
