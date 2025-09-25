@@ -1,3 +1,0 @@
-#!/bin/bash
-
-echo `date +"%H:%M %d/%m"` — $* >> $HOME/Google\ Drive/Documents/timesheet.txt
