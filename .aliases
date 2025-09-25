@@ -1,43 +1,18 @@
-## Frequently used unix commands
 alias l="ls -lah"
 alias grp="grep -rn --color"
-alias *="sudo"
-alias restartapache="sudo /usr/sbin/apachectl restart"
 
-## Git
 alias gst="git st"
 alias gd="git d"
 alias ga="git add"
 alias gci="git commit"
 alias gco="git checkout"
-alias gcob="git checkout -b"
 alias gl="git l"
 alias glg="git lg"
 
-## Drush
-alias d="drush"
-alias dcc="drush cc all"
-alias dfu="drush fu -y"
-alias dfr="drush fr -y"
-alias dcr="drush cache-rebuild"
-
-## Gulp
-alias gulpd="gulp watch --dev --livereload --notify"
-
-## MySQL
-alias mysql='mysql -uroot -proot'
-alias mysqlstart='sudo /usr/local/mysql/support-files/mysql.server start'
-alias mysqlstop='sudo /usr/local/mysql/support-files/mysql.server stop'
-
-## Other
-
-# Runs PHP_CodeSniffer using the Drupal coding standards.
-alias dcs="phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,js,css,info,txt,md"
-alias dbp="phpcs --standard=DrupalPractice --extensions=php,module,inc,install,test,profile,theme,js,css,info,txt,md"
 # Generates a random string and copies it to the clipboard.
 alias srand="cat /dev/urandom | env LC_ALL=C LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
 # Starts a simple HTTP server.
 alias http="python -m SimpleHTTPServer 8000"
 
-# OS X
+# macOS
 alias prev="open -a /Applications/Preview.app"
