@@ -1,4 +1,3 @@
-# Prompt
 ## Set terminal app's window or tab title.
 export PROMPT_COMMAND=title
 title() {
@@ -10,12 +9,15 @@ title() {
     echo -ne "\\033];$repository ❯ $directory\\007"
   fi
 }
+
 ## Set prompt using magicmonty/bash-git-prompt. A custom theme is defined in
 ## .git-prompt-colors.sh.
 if [ -f "$HOME/.dotfiles_lib/bash-git-prompt/gitprompt.sh" ]; then
   GIT_PROMPT_THEME=Custom
   source "$HOME/.dotfiles_lib/bash-git-prompt/gitprompt.sh"
 fi
+## Simplified prompt for screencasts. Uncomment to use.
+# export PS1="\[\e[38;5;13m\]❯ \[\e[0m\]"
 
 # Git completion
 if [ -f "$HOME/.dotfiles_lib/git-completion.bash" ]; then
@@ -40,16 +42,18 @@ export EDITOR=vi
 export TERM=xterm-256color
 export CLICOLOR=true
 export BASH_SILENCE_DEPRECATION_WARNING=1
-export XDEBUG_CONFIG="idekey=PHPSTORM"
+export JAVA_HOME=$(/usr/libexec/java_home)
 # Generic locations where executables may reside.
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share:$PATH"
 # Applications that only require to be downloaded and run.
 export PATH="/opt:$PATH"
+# Python
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 # Globally installed Composer packages.
-export PATH="$HOME/vendor/bin:$PATH"
-export PATH="$HOME/terminus/vendor/bin:$PATH"
+export PATH="$HOME/.composer/vendor/bin:$PATH"
 # Making nvm work.
 export NVM_DIR="$HOME/.nvm"
+export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 # Required for Homebrew.
@@ -59,9 +63,6 @@ export HOMEBREW_REPOSITORY="/opt/homebrew";
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
 export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
 export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
-# Required for the Pulse Secure VPN client.
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pulse/extra/usr/lib/x86_64-linux-gnu/
 
 # Include aliases.
 source $HOME/.aliases
-
