@@ -8,13 +8,13 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'airblade/vim-gitgutter'
-Plugin 'catppuccin/vim', {'name': 'catppuccin'}
 Plugin 'elzr/vim-json'
 Plugin 'inside/vim-search-pulse'
 Plugin 'itchyny/lightline.vim'
 Plugin 'jaxbot/syntastic-react'
 Plugin 'junegunn/goyo.vim'
 Plugin 'kien/ctrlp.vim'
+Plugin 'sainnhe/gruvbox-material'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
 Plugin 'reedes/vim-pencil'
@@ -30,8 +30,9 @@ filetype plugin indent on
 
 set background=dark
 set termguicolors
-colorscheme catppuccin_mocha
-let g:lightline = { 'colorscheme': 'catppuccin_mocha' }
+colorscheme gruvbox-material
+let g:lightline = {}
+let g:lightline.colorscheme = 'gruvbox_material'
 if has("gui_running")
   set cursorline
   set guifont=Cartograph\ CF\ 12
