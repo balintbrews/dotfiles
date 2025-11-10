@@ -66,3 +66,6 @@ export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
 
 # Include aliases.
 source $HOME/.aliases
+
+# Source private bash configuration.
+[ -f "$HOME/.bash_private" ] && source "$HOME/.bash_private"
