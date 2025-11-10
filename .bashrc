@@ -51,11 +51,6 @@ export PATH="/opt:$PATH"
 export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 # Globally installed Composer packages.
 export PATH="$HOME/.composer/vendor/bin:$PATH"
-# Making nvm work.
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
 # Required for Homebrew.
 export HOMEBREW_PREFIX="/opt/homebrew";
 export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
@@ -63,6 +58,11 @@ export HOMEBREW_REPOSITORY="/opt/homebrew";
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
 export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
 export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
 
 # Include aliases.
 source $HOME/.aliases
