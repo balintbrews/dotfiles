@@ -44,7 +44,7 @@ export CLICOLOR=true
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export JAVA_HOME=$(/usr/libexec/java_home)
 # Generic locations where executables may reside.
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share:$HOME/.local/bin${PATH+:$PATH}"
 # Applications that only require to be downloaded and run.
 export PATH="/opt:$PATH"
 # Python
