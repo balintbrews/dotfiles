@@ -49,29 +49,30 @@ set tabstop=2
 set softtabstop=4
 " Insert space characters when tab is pressed.
 set expandtab
-" Number of spaces to use for autoindenting.
+" Number of spaces to use for auto-indenting.
 set shiftwidth=2
-" Use multiple of shiftwitdh when indenting with '<' and '>'.
+" Round indentation to a multiple of `shiftwidth` when using '<' and '>'.
 set shiftround
 " Allow backspacing over everything in insert mode.
 set backspace=indent,eol,start
 set autoindent
-" Copy the previous indentation on autoindending.
+" Copy the previous indentation when auto-indenting.
 set copyindent
 " Show line numbers.
 set number
 " Display the current cursor position in the lower right corner.
 set ruler
-" Display a vertical line after the 80st column
-set textwidth=80
-set colorcolumn=+1
-" Show matching paranthesis.
+" Disable automatic hard line wrapping while typing.
+set textwidth=0
+" Display a vertical guideline after the 80th column.
+set colorcolumn=81
+" Show matching parentheses.
 set showmatch
 " Ignore case when searching.
 set ignorecase
 " Ignore case if search pattern is all lowercase, case-sensitive otherwise.
 set smartcase
-" Insert tabs on the start of a line according to shiftwitdh, not tabstop.
+" At line start, use `shiftwidth` for tab/backspace behavior (not `tabstop`).
 set smarttab
 " Highlight search terms.
 set hlsearch
@@ -81,9 +82,9 @@ set incsearch
 set gdefault
 " Enable using the mouse if terminal emulator supports it.
 set mouse=a
-" Show a status line.
+" Always show a status line.
 set laststatus=2
-" Use a status bar that is 2 rows high.
+" Use a command-line area that is 2 rows high.
 set cmdheight=2
 " Do not keep backup files.
 set nobackup
