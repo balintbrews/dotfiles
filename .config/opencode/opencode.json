@@ -1,0 +1,5 @@
+{
+  "autoupdate": true,
+  "plugin": ["@plannotator/opencode@latest"],
+  "disabled_providers": ["opencode"],
+}
