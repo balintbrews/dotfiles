@@ -1,0 +1,17 @@
+# Theme
+theme = gruvbox-material-medium-dark
+
+# Contrast
+minimum-contrast = 1.3
+
+# Font
+font-family = "Cartograph CF"
+font-size = 12
+font-thicken = true
+
+# Window
+macos-titlebar-style = hidden
+window-padding-x = 12
+window-padding-y = 12
+unfocused-split-opacity = 0.6
+window-padding-balance = true
