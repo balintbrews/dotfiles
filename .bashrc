@@ -27,13 +27,13 @@ fi
 ## Keep `ssh-agent` instance running with `keychain` where this utility is
 ## installed.
 ## See: https://unix.stackexchange.com/a/90869
-if command -v keychain &> /dev/null
-then
-  eval `keychain --agents ssh --eval id_rsa`
+if command -v keychain >/dev/null 2>&1; then
+  eval "$(keychain --agents ssh --eval id_rsa)"
 fi
 
 
 # Exports.
+OS_NAME="$(uname -s)"
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
@@ -41,25 +41,39 @@ export LC_ALL=en_US.UTF-8
 export EDITOR="code --wait"
 export TERM=xterm-256color
 export CLICOLOR=true
-export BASH_SILENCE_DEPRECATION_WARNING=1
-export JAVA_HOME=$(/usr/libexec/java_home)
+if [ "$OS_NAME" = "Darwin" ]; then
+  export BASH_SILENCE_DEPRECATION_WARNING=1
+fi
+if [ "$OS_NAME" = "Darwin" ] && command -v /usr/libexec/java_home >/dev/null 2>&1; then
+  export JAVA_HOME=$(/usr/libexec/java_home)
+elif command -v java >/dev/null 2>&1; then
+  export JAVA_HOME="$(dirname "$(dirname "$(readlink -f "$(command -v java)")")")"
+fi
 # Generic locations where executables may reside.
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share:$HOME/.local/bin${PATH+:$PATH}"
 # Applications that only require to be downloaded and run.
 export PATH="/opt:$PATH"
 # Python
-export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+if [ "$OS_NAME" = "Darwin" ]; then
+  export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+fi
 # Globally installed Composer packages.
 export PATH="$HOME/.composer/vendor/bin:$PATH"
-# Required for Homebrew.
-export HOMEBREW_PREFIX="/opt/homebrew";
-export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
-export HOMEBREW_REPOSITORY="/opt/homebrew";
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
-export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
-export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+# Homebrew
+if [ -d "/opt/homebrew" ]; then
+  export HOMEBREW_PREFIX="/opt/homebrew"
+  export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+  export HOMEBREW_REPOSITORY="/opt/homebrew"
+  export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}"
+  export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:"
+  export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}"
+fi
 # pnpm
-export PNPM_HOME="/Users/balint/Library/pnpm"
+if [ "$OS_NAME" = "Darwin" ]; then
+  export PNPM_HOME="$HOME/Library/pnpm"
+else
+  export PNPM_HOME="$HOME/.local/share/pnpm"
+fi
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -68,10 +82,12 @@ esac
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
+if command -v nvm >/dev/null 2>&1; then
+  export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
+fi
 
 # Include aliases.
-source $HOME/.aliases
+source "$HOME/.aliases"
 
 # Source private bash configuration.
 [ -f "$HOME/.bash_private" ] && source "$HOME/.bash_private"
