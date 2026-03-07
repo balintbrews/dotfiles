@@ -8,11 +8,3 @@ alias gci="git commit"
 alias gco="git checkout"
 alias gl="git l"
 alias glg="git lg"
-
-# Generates a random string and copies it to the clipboard.
-alias srand="cat /dev/urandom | env LC_ALL=C LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16 | pbcopy"
-# Starts a simple HTTP server.
-alias http="python -m SimpleHTTPServer 8000"
-
-# macOS
-alias prev="open -a /Applications/Preview.app"
