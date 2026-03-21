@@ -35,7 +35,7 @@ let g:lightline = {}
 let g:lightline.colorscheme = 'gruvbox_material'
 if has("gui_running")
   set cursorline
-  set guifont=Cartograph\ CF\ 12
+  set guifont=Cartograph\ CF:h13
   set linespace=4
   set guioptions=egrLt
   set guioptions-=L
@@ -175,9 +175,11 @@ function! Writing()
     Goyo
     PencilSoft
     set ft=markdown
-    set guifont=JetBrains\ Mono\ Regular\ 16
+    if has("gui_running")
+        set guifont=JetBrains\ Mono:h16
+        set linespace=8
+        set guioptions-=r
+    endif
     set lines=30 columns=100
-    set linespace=8
     set nocursorline
-    set guioptions-=r
 endfunction
