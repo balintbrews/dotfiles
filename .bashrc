@@ -1,14 +1,8 @@
-## Set terminal app's window or tab title.
-export PROMPT_COMMAND=title
-title() {
-  directory=${PWD##*/}
-  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    echo -ne "\033]0;$directory\007";
-  else
-    repository=$(basename "$(git rev-parse --show-toplevel)")
-    echo -ne "\\033];$repository ❯ $directory\\007"
-  fi
-}
+## Ghostty's automatic Bash integration doesn't work with macOS /bin/bash, so
+## source it manually as early as possible when available.
+if [ -n "${GHOSTTY_RESOURCES_DIR:-}" ] && [ -r "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash" ]; then
+  builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+fi
 
 ## Set prompt using magicmonty/bash-git-prompt. A custom theme is defined in
 ## .git-prompt-colors.sh.
@@ -91,3 +85,41 @@ source "$HOME/.aliases"
 
 # Source private bash configuration.
 [ -f "$HOME/.bash_private" ] && source "$HOME/.bash_private"
+
+## Set a useful terminal title for Ghostty tabs without overwriting other
+## prompt hooks.
+__dotfiles_set_terminal_title() {
+  local title path_label repo_root repo_name repo_rel host_prefix
+
+  if [ -n "${SSH_CONNECTION:-}" ]; then
+    host_prefix="${HOSTNAME%%.*}:"
+  else
+    host_prefix=""
+  fi
+
+  if repo_root=$(git rev-parse --show-toplevel 2>/dev/null); then
+    repo_name=$(basename "$repo_root")
+    repo_rel=${PWD#"$repo_root"}
+    if [ "$repo_rel" = "$PWD" ] || [ -z "$repo_rel" ]; then
+      path_label="$repo_name"
+    else
+      path_label="$repo_name${repo_rel}"
+    fi
+  else
+    path_label=${PWD/#$HOME/\~}
+    if [ -z "$path_label" ]; then
+      path_label="/"
+    fi
+  fi
+
+  title="${host_prefix}${path_label}"
+  printf '\033]0;%s\007' "$title"
+}
+
+if [[ $- == *i* ]]; then
+  if [ -n "${PROMPT_COMMAND:-}" ]; then
+    PROMPT_COMMAND="__dotfiles_set_terminal_title; ${PROMPT_COMMAND}"
+  else
+    PROMPT_COMMAND="__dotfiles_set_terminal_title"
+  fi
+fi

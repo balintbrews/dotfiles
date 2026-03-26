@@ -10,7 +10,7 @@ font-size = 12
 font-thicken = true
 
 # Window
-macos-titlebar-style = hidden
+# macos-titlebar-style = hidden
 window-padding-x = 12
 window-padding-y = 12
 unfocused-split-opacity = 0.6
