@@ -3,10 +3,15 @@ export PROMPT_COMMAND=title
 title() {
   directory=${PWD##*/}
   if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    echo -ne "\033]0;$directory\007";
+    printf '\033]0;%s\007' "$directory"
   else
-    repository=$(basename "$(git rev-parse --show-toplevel)")
-    echo -ne "\\033];$repository ❯ $directory\\007"
+    repository_root=$(git rev-parse --show-toplevel 2>/dev/null)
+    repository=$(basename "$repository_root")
+    if [ -z "$(git rev-parse --show-prefix 2>/dev/null)" ]; then
+      printf '\033]0;%s\007' "$repository"
+    else
+      printf '\033]0;%s ❯ %s\007' "$repository" "$directory"
+    fi
   fi
 }
 
