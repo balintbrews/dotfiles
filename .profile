@@ -6,4 +6,6 @@ if [ "$BASH" ]; then
   fi
 fi
 
-mesg n
+if tty -s; then
+  mesg n
+fi
