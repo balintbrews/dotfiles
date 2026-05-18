@@ -1,15 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+
 cd "$(dirname "$0")"
-function doIt() {
-	rsync --exclude ".git/" --exclude ".DS_Store" --exclude "sync.sh" --exclude "install.sh" --exclude "README.md" -av . ~
-}
-if [ "$1" == "--force" -o "$1" == "-f" ]; then
-	doIt
-else
-	read -p "This may overwrite existing files in your home directory. Are you sure? (y/n) " -n 1
-	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		doIt
-	fi
+
+STOW_ARGS=(--target="$HOME" --dotfiles --restow)
+
+if [ "${1:-}" = "--adopt" ]; then
+  STOW_ARGS+=(--adopt)
+  shift
 fi
-unset doIt
+
+PACKAGES=()
+for dir in */; do
+  PACKAGES+=("${dir%/}")
+done
+
+stow "${STOW_ARGS[@]}" "${PACKAGES[@]}"

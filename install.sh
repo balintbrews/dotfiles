@@ -14,6 +14,18 @@ fi
 mkdir "$HOME/.dotfiles_lib"
 
 # Install dependencies.
+if ! command -v stow >/dev/null 2>&1; then
+  echo -e "${BLUE}==> Installing GNU Stow.${NC}"
+  if command -v brew >/dev/null 2>&1; then
+    brew install stow
+  elif command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y stow
+  else
+    echo -e "${BLUE}==> GNU Stow is required. Install it with your package manager.${NC}"
+  fi
+fi
+
 echo -e "${BLUE}==> Downloading git-completion.bash.${NC}"
 curl -o "$HOME/.dotfiles_lib/git-completion.bash" https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
 # bash-git-prompt
