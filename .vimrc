@@ -35,7 +35,7 @@ let g:lightline = {}
 let g:lightline.colorscheme = 'gruvbox_material'
 if has("gui_running")
   set cursorline
-  set guifont=Cartograph\ CF:h13
+  set guifont=Lilex:h13
   set linespace=4
   set guioptions=egrLt
   set guioptions-=L
