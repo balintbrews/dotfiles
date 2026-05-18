@@ -9,7 +9,6 @@ import {
 } from "@earendil-works/pi-coding-agent";
 import { basename } from "node:path";
 
-const DEFAULT_THRESHOLD_MS = 15000;
 const DEFAULT_DEBOUNCE_MS = 3000;
 const NOTIFY_TIMEOUT_MS = 5000;
 const DEFAULT_NOTIFY_LEVEL = "medium";
@@ -31,6 +30,18 @@ interface AssistantMessageLike {
 	errorMessage?: string;
 	content?: Array<{ type?: string; text?: string }>;
 }
+
+interface CmuxSurfaceLike {
+	surface_ref?: string;
+	workspace_ref?: string;
+}
+
+interface CmuxIdentifyResult {
+	caller?: CmuxSurfaceLike | null;
+	focused?: CmuxSurfaceLike | null;
+}
+
+type FocusState = "focused" | "unfocused" | "unknown";
 
 function getNumberFromEnv(name: string, fallback: number): number {
 	const value = process.env[name];
@@ -88,44 +99,37 @@ function summarizeError(event: ToolResultEvent): string {
 	return text.length > 120 ? `${text.slice(0, 117)}...` : text;
 }
 
-function summarizeSuccess(state: RunState, durationMs: number, thresholdMs: number): string {
+function summarizeSuccess(state: RunState, durationMs: number): string {
+	const duration = formatDuration(durationMs);
 	const changedCount = state.changedFiles.size;
 	if (changedCount === 1) {
 		const [file] = [...state.changedFiles];
-		const summary = `Updated ${basename(file)}`;
-		return durationMs >= thresholdMs ? `${summary} in ${formatDuration(durationMs)}` : summary;
+		return `Updated ${basename(file)} in ${duration}`;
 	}
 	if (changedCount > 1) {
-		const summary = `Updated ${changedCount} ${pluralize(changedCount, "file")}`;
-		return durationMs >= thresholdMs ? `${summary} in ${formatDuration(durationMs)}` : summary;
+		return `Updated ${changedCount} ${pluralize(changedCount, "file")} in ${duration}`;
 	}
 
 	const readCount = state.readFiles.size;
 	if (readCount === 1) {
 		const [file] = [...state.readFiles];
-		const summary = `Reviewed ${basename(file)}`;
-		return durationMs >= thresholdMs ? `${summary} in ${formatDuration(durationMs)}` : summary;
+		return `Reviewed ${basename(file)} in ${duration}`;
 	}
 	if (readCount > 1) {
-		const summary = `Reviewed ${readCount} ${pluralize(readCount, "file")}`;
-		return durationMs >= thresholdMs ? `${summary} in ${formatDuration(durationMs)}` : summary;
+		return `Reviewed ${readCount} ${pluralize(readCount, "file")} in ${duration}`;
 	}
 
 	if (state.searchCount > 0 && state.bashCount > 0) {
-		const summary = `Ran ${state.searchCount} ${pluralize(state.searchCount, "search")} and ${state.bashCount} ${pluralize(state.bashCount, "shell command")}`;
-		return durationMs >= thresholdMs ? `${summary} in ${formatDuration(durationMs)}` : summary;
+		return `Ran ${state.searchCount} ${pluralize(state.searchCount, "search")} and ${state.bashCount} ${pluralize(state.bashCount, "shell command")} in ${duration}`;
 	}
 	if (state.searchCount > 0) {
 		const summary = state.searchCount === 1 ? "Searched the codebase" : `Ran ${state.searchCount} searches`;
-		return durationMs >= thresholdMs ? `${summary} in ${formatDuration(durationMs)}` : summary;
+		return `${summary} in ${duration}`;
 	}
 	if (state.bashCount > 0) {
-		const summary = `Ran ${state.bashCount} ${pluralize(state.bashCount, "shell command")}`;
-		return durationMs >= thresholdMs ? `${summary} in ${formatDuration(durationMs)}` : summary;
+		return `Ran ${state.bashCount} ${pluralize(state.bashCount, "shell command")} in ${duration}`;
 	}
-	return durationMs >= thresholdMs
-		? `Finished in ${formatDuration(durationMs)}`
-		: "Finished and waiting for input";
+	return `Finished in ${duration}`;
 }
 
 function isAssistantMessage(message: unknown): message is AssistantMessageLike {
@@ -171,18 +175,12 @@ function summarizeRunError(messages: readonly unknown[], fallbackError?: string)
 	return summary.length > 120 ? `${summary.slice(0, 117)}...` : summary;
 }
 
-function buildSubtitle(hasRunError: boolean, state: RunState, durationMs: number, thresholdMs: number): string {
-	if (hasRunError) return "Error";
-	if (state.changedFiles.size > 0 || durationMs >= thresholdMs) return "Task Complete";
-	return "Waiting";
+function buildSubtitle(hasRunError: boolean): string {
+	return hasRunError ? "Error" : "Task Complete";
 }
 
-function shouldNotify(level: NotifyLevel, subtitle: string): boolean {
-	if (level === "disabled") return false;
-	if (level === "all") return true;
-	if (level === "medium") return subtitle === "Task Complete" || subtitle === "Error";
-	if (level === "low") return subtitle === "Error";
-	return true;
+function shouldNotify(level: NotifyLevel): boolean {
+	return level !== "disabled";
 }
 
 function createEmptyRunState(): RunState {
@@ -196,8 +194,22 @@ function createEmptyRunState(): RunState {
 	};
 }
 
+function isCmuxIdentifyResult(value: unknown): value is CmuxIdentifyResult {
+	return typeof value === "object" && value !== null;
+}
+
+function getFocusStateFromIdentify(result: CmuxIdentifyResult): FocusState {
+	const callerSurface = result.caller?.surface_ref;
+	const focusedSurface = result.focused?.surface_ref;
+	if (!callerSurface || !focusedSurface) return "unknown";
+	return callerSurface === focusedSurface ? "focused" : "unfocused";
+}
+
+function isMacOS(): boolean {
+	return process.platform === "darwin";
+}
+
 export default function cmuxNotifyExtension(pi: ExtensionAPI) {
-	const thresholdMs = getNumberFromEnv("PI_CMUX_NOTIFY_THRESHOLD_MS", DEFAULT_THRESHOLD_MS);
 	const debounceMs = getNumberFromEnv("PI_CMUX_NOTIFY_DEBOUNCE_MS", DEFAULT_DEBOUNCE_MS);
 	const notifyLevel = getNotifyLevelFromEnv();
 	const title = process.env.PI_CMUX_NOTIFY_TITLE || "Pi";
@@ -215,6 +227,40 @@ export default function cmuxNotifyExtension(pi: ExtensionAPI) {
 		if (reportedNotificationFailure) return;
 		reportedNotificationFailure = true;
 		ctx?.ui?.notify?.(`cmux notification failed: ${error}`, "warning");
+	};
+
+	const isCmuxFrontmost = async (): Promise<boolean | undefined> => {
+		if (!isMacOS()) return undefined;
+
+		const result = await pi.exec(
+			"osascript",
+			["-e", "id of application (path to frontmost application as text)"],
+			{ timeout: NOTIFY_TIMEOUT_MS },
+		);
+		if (result.killed || result.code !== 0) return undefined;
+
+		const frontmostBundleId = result.stdout.trim();
+		if (!frontmostBundleId) return undefined;
+		return frontmostBundleId === process.env.CMUX_BUNDLE_ID;
+	};
+
+	const getFocusState = async (): Promise<FocusState> => {
+		const surfaceId = process.env.CMUX_SURFACE_ID;
+		if (!surfaceId || cmuxUnavailable) return "unknown";
+
+		const cmuxFrontmost = await isCmuxFrontmost();
+		if (cmuxFrontmost === false) return "unfocused";
+
+		const result = await pi.exec("cmux", ["identify", "--surface", surfaceId], { timeout: NOTIFY_TIMEOUT_MS });
+		if (result.killed || result.code !== 0) return "unknown";
+
+		try {
+			const parsed: unknown = JSON.parse(result.stdout);
+			if (!isCmuxIdentifyResult(parsed)) return "unknown";
+			return getFocusStateFromIdentify(parsed);
+		} catch {
+			return "unknown";
+		}
 	};
 
 	const sendNotification = async (subtitle: string, body: string): Promise<{ ok: boolean; error?: string }> => {
@@ -292,11 +338,18 @@ export default function cmuxNotifyExtension(pi: ExtensionAPI) {
 	pi.on("agent_end", async (event, ctx) => {
 		const durationMs = Date.now() - runState.startedAt;
 		const runError = summarizeRunError(event.messages, runState.firstToolError);
-		const subtitle = buildSubtitle(Boolean(runError), runState, durationMs, thresholdMs);
-		if (!shouldNotify(notifyLevel, subtitle)) {
+		const focusState = await getFocusState();
+
+		if (focusState !== "unfocused") {
+			if (debug) console.warn(`[cmux-notify] skipped notification because focus state is ${focusState}`);
 			return;
 		}
-		const body = runError || summarizeSuccess(runState, durationMs, thresholdMs);
+
+		const subtitle = buildSubtitle(Boolean(runError));
+		if (!shouldNotify(notifyLevel)) {
+			return;
+		}
+		const body = runError || summarizeSuccess(runState, durationMs);
 		void sendNotification(subtitle, body)
 			.then((result) => {
 				if (!result.ok && result.error) reportNotificationFailure(result.error, ctx);
