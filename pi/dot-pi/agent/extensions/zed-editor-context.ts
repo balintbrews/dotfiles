@@ -1,3 +1,10 @@
+/**
+ * @file Automatically attaches relevant Zed editor context to pi requests.
+ *
+ * Polls Zed's local SQLite state while running from a Zed terminal, scopes
+ * context to the active Zed workspace that matches pi's cwd, and backs off to
+ * slow workspace checks when Zed is focused on another project.
+ */
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
@@ -31,6 +38,11 @@ type ActiveRow = {
   buffer_path: string | null;
   pane_active: number | string | null;
 };
+type ActiveWorkspaceRow = {
+  window_id: number | string | null;
+  active_workspace_id: number | string | null;
+  workspace_paths: string | null;
+};
 type FileCacheEntry = { mtimeMs: number; size: number; text: string };
 
 type SelectionState = {
@@ -42,6 +54,7 @@ type SelectionState = {
   lastError?: string;
   lastPollAt?: Date;
   dbPath?: string;
+  workspaceMismatch?: boolean;
 };
 
 const state: SelectionState = { enabled: true, status: "disabled" };
@@ -53,6 +66,8 @@ let pollGeneration = 0;
 let lastContext: ExtensionContext | undefined;
 
 const pollMs = () => envNumber("PI_ZED_CONTEXT_POLL_MS", 1000, 100);
+const workspaceMismatchPollMs = () =>
+  envNumber("PI_ZED_CONTEXT_WORKSPACE_MISMATCH_POLL_MS", 5000, 100);
 const debug = () => process.env.PI_ZED_CONTEXT_DEBUG === "1";
 const maxFileBytes = () =>
   envNumber("PI_ZED_CONTEXT_MAX_FILE_BYTES", 2 * 1024 * 1024, 0);
@@ -166,7 +181,13 @@ async function pollOnceAndReschedule(generation: number) {
       });
   await inFlight.catch(() => undefined);
   if (!state.enabled || generation !== pollGeneration) return;
-  schedulePoll(state.dbPath ? pollMs() : 5000);
+  schedulePoll(
+    state.workspaceMismatch
+      ? workspaceMismatchPollMs()
+      : state.dbPath
+        ? pollMs()
+        : 5000,
+  );
 }
 
 async function pollOnce() {
@@ -188,20 +209,23 @@ async function pollOnce() {
     state.selectionKey = nextKey;
     state.status = "connected";
     state.lastError = undefined;
+    state.workspaceMismatch = false;
   } else if (result.type === "empty") {
     state.selection = undefined;
     state.selectionKey = undefined;
     state.status = "connected";
     state.lastError = undefined;
+    state.workspaceMismatch = false;
   } else if (result.type === "workspace_mismatch") {
     clearSelection();
     state.status = "disabled";
     state.lastError = "Zed workspace no longer matches pi cwd";
-    stopPolling();
+    state.workspaceMismatch = true;
   } else {
     clearSelection();
     state.status = "unavailable";
     state.lastError = result.reason ?? "Zed context unavailable";
+    state.workspaceMismatch = false;
     if (debug()) console.error("[zed-context]", state.lastError);
   }
   updateStatus();
@@ -246,6 +270,14 @@ function sqlString(value: string): string {
 
 function resolveZedSelection(dbPath: string, cwd: string): ZedSelectionResult {
   try {
+    const activeWorkspace = resolveActiveZedWorkspace(dbPath);
+    if (activeWorkspace && scoreWorkspace(activeWorkspace, cwd) < 0)
+      return { type: "workspace_mismatch" };
+
+    const workspaceFilter =
+      activeWorkspace?.active_workspace_id != null
+        ? ` and i.workspace_id = ${sqlString(String(activeWorkspace.active_workspace_id))}`
+        : "";
     const rows = queryJson<ActiveRow>(
       dbPath,
       `select i.kind as item_kind, e.item_id as editor_id, i.workspace_id as workspace_id, w.paths as workspace_paths, w.timestamp as timestamp, e.buffer_path as buffer_path, p.active as pane_active
@@ -253,23 +285,20 @@ from items i
 join panes p on p.pane_id = i.pane_id and p.workspace_id = i.workspace_id
 join workspaces w on w.workspace_id = i.workspace_id
 left join editors e on e.item_id = i.item_id and e.workspace_id = i.workspace_id
-where i.active = 1 and p.active = 1
+where i.active = 1 and p.active = 1${workspaceFilter}
 order by w.timestamp desc`,
     );
-    if (rows[0] && scoreWorkspace(rows[0], cwd) < 0)
-      return { type: "workspace_mismatch" };
-
     const matchingRows = rows
       .map((r) => ({ row: r, score: scoreWorkspace(r, cwd) }))
       .filter((x) => x.score >= 0);
 
-    if (rows.length > 0 && matchingRows.length === 0)
-      return { type: "workspace_mismatch" };
-
     const row = matchingRows.sort(compareEditorRows)[0]?.row;
     if (!row) return { type: "empty" };
     if (row.item_kind !== "Editor" || row.editor_id == null || !row.buffer_path)
-      return { type: "unavailable", reason: "Active Zed item is not an editor" };
+      return {
+        type: "unavailable",
+        reason: "Active Zed item is not an editor",
+      };
 
     const selectionRows = queryJson<{
       selection_start: number | null;
@@ -317,6 +346,30 @@ order by w.timestamp desc`,
   }
 }
 
+function resolveActiveZedWorkspace(
+  dbPath: string,
+): ActiveWorkspaceRow | undefined {
+  return queryJson<ActiveWorkspaceRow>(
+    dbPath,
+    `with front_window as (
+  select json_extract(value, '$[#-1]') as window_id
+  from kv_store
+  where key = 'session_window_stack'
+), active_workspace as (
+  select json_extract(value, '$.active_workspace_id') as workspace_id
+  from scoped_kv_store
+  where namespace = 'multi_workspace_state'
+    and key = (select window_id from front_window)
+)
+select
+  (select window_id from front_window) as window_id,
+  (select workspace_id from active_workspace) as active_workspace_id,
+  w.paths as workspace_paths
+from workspaces w
+where w.workspace_id = (select workspace_id from active_workspace)`,
+  ).at(0);
+}
+
 function compareEditorRows(
   a: { row: ActiveRow; score: number },
   b: { row: ActiveRow; score: number },
@@ -344,7 +397,10 @@ function workspacePaths(value: string | null): string[] {
   return value.split(/\n|\0/).filter(Boolean);
 }
 
-function scoreWorkspace(row: ActiveRow, cwd: string): number {
+function scoreWorkspace(
+  row: { workspace_paths: string | null },
+  cwd: string,
+): number {
   const resolvedCwd = path.resolve(cwd);
   let best = -1;
   for (const p of workspacePaths(row.workspace_paths)) {
@@ -491,7 +547,9 @@ function updateStatus() {
   if (state.selectionKey === state.sentSelectionKey)
     return ctx.ui.setStatus("zed-context", "");
 
-  const hasSelection = state.selection.ranges.some((range) => range.text.length > 0);
+  const hasSelection = state.selection.ranges.some(
+    (range) => range.text.length > 0,
+  );
   ctx.ui.setStatus(
     "zed-context",
     `${hasSelection ? "✎" : "⌖"} ${formatFileLabel(state.selection)}`,
