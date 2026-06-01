@@ -8,6 +8,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { complete } from "@earendil-works/pi-ai";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 const DEFAULT_TITLE = "π";
@@ -16,9 +17,15 @@ const DEFAULT_DEBOUNCE_MS = 1000;
 const NOTIFY_TIMEOUT_MS = 5000;
 const NOTIFICATION_GROUP_PREFIX = "pi-zed-notify";
 
-interface AssistantMessageLike {
-  role: "assistant";
+interface MessageLike {
+  role?: string;
+  content?: unknown;
   stopReason?: string;
+}
+
+interface TextContentBlock {
+  type?: string;
+  text?: string;
 }
 
 type FocusState = "focused" | "unfocused" | "unknown";
@@ -33,17 +40,17 @@ type ZedProject = {
   paths: string[];
 };
 
-function isAssistantMessage(message: unknown): message is AssistantMessageLike {
-  return (
-    typeof message === "object" &&
-    message !== null &&
-    (message as { role?: unknown }).role === "assistant"
-  );
+function isMessage(message: unknown): message is MessageLike {
+  return typeof message === "object" && message !== null;
+}
+
+function isAssistantMessage(message: unknown): message is MessageLike {
+  return isMessage(message) && message.role === "assistant";
 }
 
 function getLastAssistantMessage(
   messages: readonly unknown[],
-): AssistantMessageLike | undefined {
+): MessageLike | undefined {
   for (let index = messages.length - 1; index >= 0; index -= 1) {
     const message = messages[index];
     if (isAssistantMessage(message)) return message;
@@ -60,8 +67,108 @@ function hasRunError(messages: readonly unknown[]): boolean {
   );
 }
 
-function buildSubtitle(hasRunError: boolean): string {
+function extractText(content: unknown): string {
+  if (typeof content === "string") return content;
+  if (!Array.isArray(content)) return "";
+  return content
+    .filter(
+      (part): part is TextContentBlock =>
+        typeof part === "object" &&/re
+        part !== null &&
+        (part as TextContentBlock).type === "text" &&
+        typeof (part as TextContentBlock).text === "string",
+    )
+    .map((part) => part.text)
+    .join("\n");
+}
+
+function getLastTurn(messages: readonly unknown[]): string {
+  const turn: string[] = [];
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    const message = messages[index];
+    if (!isMessage(message)) continue;
+    if (message.role !== "user" && message.role !== "assistant") continue;
+
+    const text = extractText(message.content).trim();
+    if (!text) continue;
+    turn.unshift(`${message.role}: ${text}`);
+    if (message.role === "user") break;
+  }
+  return turn.join("\n\n");
+}
+
+function sanitizeSummary(summary: string): string {
+  return summary
+    .replace(/[\r\n]+/g, " ")
+    .replace(/^['"“”‘’`]+|['"“”‘’`]+$/g, "")
+    .trim()
+    .slice(0, 80);
+}
+
+function buildFallbackSubtitle(hasRunError: boolean): string {
   return hasRunError ? "Agent stopped" : "Agent finished";
+}
+
+async function buildSubtitle(
+  messages: readonly unknown[],
+  ctx: {
+    model?: unknown;
+    modelRegistry?: {
+      getApiKeyAndHeaders?: (model: unknown) => Promise<
+        | { ok: true; apiKey?: string; headers?: Record<string, string> }
+        | { ok: false; error: string }
+      >;
+    };
+  },
+): Promise<string> {
+  const fallback = buildFallbackSubtitle(hasRunError(messages));
+  const lastTurn = getLastTurn(messages);
+  if (!lastTurn || !ctx.model || !ctx.modelRegistry?.getApiKeyAndHeaders)
+    return fallback;
+
+  try {
+    const auth = await ctx.modelRegistry.getApiKeyAndHeaders(ctx.model);
+    if (!auth.ok || !auth.apiKey) return fallback;
+
+    const response = await complete(
+      ctx.model as Parameters<typeof complete>[0],
+      {
+        messages: [
+          {
+            role: "user" as const,
+            content: [
+              {
+                type: "text" as const,
+                text: [
+                  "Write a very short macOS notification summary of this last AI coding-agent turn.",
+                  "Return only the summary, 2-6 words, no punctuation unless needed.",
+                  "Prefer what changed or what happened over generic status words.",
+                  "",
+                  lastTurn,
+                ].join("\n"),
+              },
+            ],
+            timestamp: Date.now(),
+          },
+        ],
+      },
+      {
+        apiKey: auth.apiKey,
+        headers: auth.headers,
+        reasoningEffort: "minimal",
+      },
+    );
+
+    const summary = sanitizeSummary(
+      response.content
+        .filter((c): c is { type: "text"; text: string } => c.type === "text")
+        .map((c) => c.text)
+        .join(" "),
+    );
+    return summary || fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 function buildTitle(projectName: string | undefined): string {
@@ -327,10 +434,10 @@ where w.workspace_id = (select workspace_id from active_workspace)`,
       return;
     }
 
-    const subtitle = buildSubtitle(hasRunError(event.messages));
     const projectName = ctx.cwd ? path.basename(ctx.cwd) : undefined;
     const title = buildTitle(projectName);
     try {
+      const subtitle = await buildSubtitle(event.messages, ctx);
       const result = await sendNotification(
         subtitle,
         title,
