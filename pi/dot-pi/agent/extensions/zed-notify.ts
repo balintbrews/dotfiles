@@ -73,7 +73,7 @@ function extractText(content: unknown): string {
   return content
     .filter(
       (part): part is TextContentBlock =>
-        typeof part === "object" &&/re
+        typeof part === "object" &&
         part !== null &&
         (part as TextContentBlock).type === "text" &&
         typeof (part as TextContentBlock).text === "string",
