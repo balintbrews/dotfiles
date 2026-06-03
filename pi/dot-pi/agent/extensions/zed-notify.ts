@@ -403,7 +403,7 @@ where w.workspace_id = (select workspace_id from active_workspace)`,
     const openCommand = ["open", zedOpenUrl].map(shellQuote).join(" ");
     const command = `result=$(${alerterCommand}); case "$result" in @ACTIONCLICKED|@CONTENTCLICKED) ${openCommand} ;; esac`;
 
-    const result = await pi.exec("sh", ["-c", `${command} >/dev/null 2>&1 &`], {
+    const result = await pi.exec("sh", ["-c", `(${command}) >/dev/null 2>&1 &`], {
       timeout: NOTIFY_TIMEOUT_MS,
     });
 
