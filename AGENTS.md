@@ -1,5 +1,13 @@
 # Agent instructions
 
+## Tmux config
+
+After changing `tmux/dot-config/tmux/tmux.conf`, automatically reload the tmux config in the current tmux server when possible:
+
+```sh
+tmux source-file $HOME/.config/tmux/tmux.conf
+```
+
 ## Commit messages
 
 Follow Conventional Commits:
