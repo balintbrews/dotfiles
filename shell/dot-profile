@@ -9,3 +9,8 @@ fi
 if tty -s; then
   mesg n
 fi
+
+# Rust toolchain installed through rustup for non-Bash login shells.
+if [ -z "$BASH" ] && [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi

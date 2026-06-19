@@ -78,6 +78,9 @@ if [ -d "/opt/homebrew" ]; then
   export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:"
   export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}"
 fi
+# Rust toolchain installed through rustup.
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
 # pnpm
 if [ "$OS_NAME" = "Darwin" ]; then
   export PNPM_HOME="$HOME/Library/pnpm"
