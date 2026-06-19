@@ -15,6 +15,11 @@ title() {
   fi
 }
 
+## Disable Readline's bracketed paste handling for interactive Bash sessions.
+if [[ $- == *i* ]]; then
+  bind 'set enable-bracketed-paste off'
+fi
+
 ## Set prompt using magicmonty/bash-git-prompt. A custom theme is defined in
 ## .git-prompt-colors.sh.
 if [ -f "$HOME/.dotfiles_lib/bash-git-prompt/gitprompt.sh" ]; then
