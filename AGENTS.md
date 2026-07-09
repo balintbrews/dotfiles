@@ -8,6 +8,14 @@ After changing `tmux/dot-config/tmux/tmux.conf`, automatically reload the tmux c
 tmux source-file $HOME/.config/tmux/tmux.conf
 ```
 
+## Herdr config
+
+After changing `herdr/dot-config/herdr/config.toml`, automatically reload the Herdr config when possible:
+
+```sh
+herdr server reload-config
+```
+
 ## Commit messages
 
 Follow Conventional Commits:

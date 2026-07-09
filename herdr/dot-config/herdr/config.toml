@@ -1,0 +1,26 @@
+[keys]
+prefix = "ctrl+a"
+
+[theme]
+auto_switch = false
+name = "terminal"
+
+[theme.custom]
+panel_bg = "#10141C"
+surface0 = "#0D1017"
+surface1 = "#161A24"
+surface_dim = "#151820"
+overlay0 = "#5A6673"
+overlay1 = "#BFBDB6"
+text = "#BFBDB6"
+subtext0 = "#5A6673"
+mauve = "#D2A6FF"
+green = "#AAD94C"
+yellow = "#FFB454"
+red = "#F07178"
+blue = "#59C2FF"
+teal = "#95E6CB"
+peach = "#FF8F40"
+
+[ui]
+hide_tab_bar_when_single_tab = true
