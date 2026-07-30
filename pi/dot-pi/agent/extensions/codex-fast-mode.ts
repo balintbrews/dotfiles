@@ -2,7 +2,7 @@ import { streamSimpleOpenAICodexResponses } from "@earendil-works/pi-ai";
 import type { Api, Model } from "@earendil-works/pi-ai";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
-const SUPPORTED_MODEL_ID = "gpt-5.5";
+const SUPPORTED_MODEL_ID = "gpt-5.6-sol";
 
 function isCodexResponsesModel(
   model: Model<Api>,
