@@ -81,20 +81,6 @@ fi
 # Rust toolchain installed through rustup.
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-# pnpm
-if [ "$OS_NAME" = "Darwin" ]; then
-  export PNPM_HOME="$HOME/Library/pnpm"
-else
-  export PNPM_HOME="$HOME/.local/share/pnpm"
-fi
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
@@ -102,6 +88,14 @@ export NVM_DIR="$HOME/.nvm"
 if command -v nvm >/dev/null 2>&1; then
   export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
 fi
+
+# pnpm
+if [ "$OS_NAME" = "Darwin" ]; then
+  export PNPM_HOME="$HOME/Library/pnpm"
+else
+  export PNPM_HOME="$HOME/.local/share/pnpm"
+fi
+export PATH="$PNPM_HOME/bin:$PATH"
 
 # Include aliases.
 source "$HOME/.aliases"
