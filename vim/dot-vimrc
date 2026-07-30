@@ -14,7 +14,7 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'jaxbot/syntastic-react'
 Plugin 'junegunn/goyo.vim'
 Plugin 'kien/ctrlp.vim'
-Plugin 'sainnhe/gruvbox-material'
+Plugin 'ayu-theme/ayu-vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
 Plugin 'reedes/vim-pencil'
@@ -30,9 +30,10 @@ filetype plugin indent on
 
 set background=dark
 set termguicolors
-colorscheme gruvbox-material
+let ayucolor="dark"
+colorscheme ayu
 let g:lightline = {}
-let g:lightline.colorscheme = 'gruvbox_material'
+let g:lightline.colorscheme = 'ayu'
 if has("gui_running")
   set cursorline
   set guifont=Lilex:h13
