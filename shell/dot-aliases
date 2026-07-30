@@ -1,6 +1,11 @@
 alias l="ls -lah"
 alias grp="grep -rn --color"
 
+# npm 12 logs every command invoked through npx at notice level.
+npx() {
+  npm_config_loglevel=warn command npx "$@"
+}
+
 alias gst="git st"
 alias gd="git d"
 alias ga="git add"
