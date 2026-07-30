@@ -175,17 +175,38 @@ function buildTitle(projectName: string | undefined): string {
   return projectName ? `${DEFAULT_TITLE} - ${projectName}` : DEFAULT_TITLE;
 }
 
-function encodeFilePathForUrl(filePath: string): string {
-  return filePath
-    .split(path.sep)
-    .map((segment) => encodeURIComponent(segment))
-    .join("/");
+function resolveZedIconPath(): string | undefined {
+  const home = os.homedir();
+  return [
+    process.env.PI_ZED_ICON,
+    "/Applications/Zed.app/Contents/Resources/Zed.icns",
+    path.join(home, "Applications/Zed.app/Contents/Resources/Zed.icns"),
+  ].find((candidate): candidate is string => {
+    if (!candidate) return false;
+    try {
+      return fs.statSync(candidate).isFile();
+    } catch {
+      return false;
+    }
+  });
 }
 
-function buildZedOpenUrl(cwd: string | undefined): string {
-  return cwd
-    ? `zed://file${encodeFilePathForUrl(path.resolve(cwd))}`
-    : "zed://open";
+function buildZedOpenCommand(cwd: string | undefined): string {
+  if (!cwd) return ["open", "-b", ZED_BUNDLE_ID].map(shellQuote).join(" ");
+
+  const workspacePath = path.resolve(cwd);
+  const zedCommand = ["zed", workspacePath].map(shellQuote).join(" ");
+  const openCommand = ["open", "-b", ZED_BUNDLE_ID, workspacePath]
+    .map(shellQuote)
+    .join(" ");
+
+  return [
+    "if command -v zed >/dev/null 2>&1; then",
+    `${zedCommand} || ${openCommand}`,
+    "else",
+    openCommand,
+    "fi",
+  ].join(" ");
 }
 
 function buildNotificationGroup(projectPath: string | undefined): string {
@@ -357,7 +378,7 @@ where w.workspace_id = (select workspace_id from active_workspace)`,
   const sendNotification = async (
     subtitle: string,
     notificationTitle = DEFAULT_TITLE,
-    zedOpenUrl = "zed://open",
+    cwd: string | undefined = undefined,
     notificationGroup = NOTIFICATION_GROUP_PREFIX,
   ): Promise<{ ok: boolean; error?: string }> => {
     if (!isZedTerminal() && process.env.PI_ZED_NOTIFY_FORCE !== "1") {
@@ -387,37 +408,45 @@ where w.workspace_id = (select workspace_id from active_workspace)`,
     if (alerterExists.code !== 0)
       return { ok: false, error: "alerter not found" };
 
+    const zedIconPath = resolveZedIconPath();
+    // Do not pass --sender dev.zed.Zed: macOS would launch Zed itself
+    // on "Show", racing with this targeted workspace opener.
     const alerterCommand = [
       "alerter",
       "--title",
       notificationTitle,
       "--message",
       subtitle,
-      "--sender",
-      ZED_BUNDLE_ID,
       "--group",
       notificationGroup,
+      ...(zedIconPath ? ["--app-icon", zedIconPath] : []),
     ]
       .map(shellQuote)
       .join(" ");
-    const openCommand = ["open", zedOpenUrl].map(shellQuote).join(" ");
+    const openCommand = buildZedOpenCommand(cwd);
     const command = `result=$(${alerterCommand}); case "$result" in @ACTIONCLICKED|@CONTENTCLICKED) ${openCommand} ;; esac`;
 
-    const result = await pi.exec("sh", ["-c", `(${command}) >/dev/null 2>&1 &`], {
-      timeout: NOTIFY_TIMEOUT_MS,
-    });
+    const result = await pi.exec(
+      "sh",
+      [
+        "-c",
+        `nohup sh -c ${shellQuote(command)} >/dev/null 2>&1 </dev/null &`,
+      ],
+      { timeout: NOTIFY_TIMEOUT_MS },
+    );
 
     lastNotificationAt = now;
     lastNotificationKey = notificationKey;
 
-    if (result.killed) return { ok: false, error: "alerter timed out" };
+    if (result.killed)
+      return { ok: false, error: "alerter launcher timed out" };
     if (result.code !== 0) {
       return {
         ok: false,
         error:
           result.stderr.trim() ||
           result.stdout.trim() ||
-          `alerter exited with code ${result.code}`,
+          `alerter launcher exited with code ${result.code}`,
       };
     }
 
@@ -441,7 +470,7 @@ where w.workspace_id = (select workspace_id from active_workspace)`,
       const result = await sendNotification(
         subtitle,
         title,
-        buildZedOpenUrl(ctx.cwd),
+        ctx.cwd,
         buildNotificationGroup(ctx.cwd),
       );
       if (!result.ok && result.error)
