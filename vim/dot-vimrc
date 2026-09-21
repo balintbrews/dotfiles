@@ -107,6 +107,8 @@ vmap <C-v> c<ESC>"+p
 imap <C-v> <C-r><C-o>+
 
 " Highlighting
+" Automatically select the appropriate regex engine.
+set regexpengine=0
 if &t_Co > 2 || has("gui_running")
    " Switch syntax highlighting on, when the terminal has colors.
    syntax on
