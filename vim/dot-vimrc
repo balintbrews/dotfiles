@@ -95,8 +95,8 @@ set noswapfile
 set wildmenu
 " Change the terminal's title.
 set title
-" Don't beep.
-set visualbell
+" Don't beep or flash the screen.
+set novisualbell
 set noerrorbells
 
 " Copy/Cut/paste from/to global clipboard with Ctrl+C/X/V.
