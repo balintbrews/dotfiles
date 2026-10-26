@@ -43,25 +43,25 @@ export default function liteLlmProvider(pi: ExtensionAPI) {
     models: [
       {
         ...CLAUDE_MODEL_DEFAULTS,
-        id: "anthropic.claude-opus-5",
-        name: "Claude Opus 5",
+        id: "anthropic.claude-opus-5-5",
+        name: "Claude Opus 5.5",
         thinkingLevelMap: {
           minimal: null,
           xhigh: "xhigh",
           max: "max",
         },
         cost: {
-          input: 5.5,
-          output: 27.5,
-          cacheRead: 0.55,
-          cacheWrite: 6.875,
+          input: 4.4,
+          output: 22,
+          cacheRead: 0.22,
+          cacheWrite: 5.5,
         },
         maxTokens: 128000,
       },
       {
         ...CLAUDE_MODEL_DEFAULTS,
-        id: "anthropic.claude-sonnet-5",
-        name: "Claude Sonnet 5",
+        id: "anthropic.claude-sonnet-5-5",
+        name: "Claude Sonnet 5.5",
         thinkingLevelMap: {
           minimal: null,
           xhigh: "xhigh",
@@ -69,7 +69,7 @@ export default function liteLlmProvider(pi: ExtensionAPI) {
         cost: {
           input: 2.2,
           output: 11,
-          cacheRead: 0.22,
+          cacheRead: 0.11,
           cacheWrite: 2.75,
         },
         maxTokens: 128000,
